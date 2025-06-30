@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>로그 분석</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      body { font-family: 'Noto Sans KR', Arial, sans-serif; }
+      .card { box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+      .navbar { box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+      .btn-success { font-weight: 600; }
+      h1, h2, .navbar-brand { font-weight: 700; }
+    </style>
+</head>
+<body class="bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold" href="/">로그 분석기</a>
+  </div>
+</nav>
+<div class="container">
+    <h1 class="mb-4 display-5">로그 파일 분석</h1>
+    <form method="post" class="row g-3 mb-4">
+        <div class="col-md-6">
+            <select class="form-select" name="logfile" required>
+                <option value="" disabled selected>분석할 로그 파일을 선택하세요</option>
+                {% for file in log_files %}
+                <option value="{{ file }}" {% if selected_file == file %}selected{% endif %}>{{ file }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="form-control" name="keyword" placeholder="패턴 검색(예: /api, 404 등)" value="{{ keyword }}">
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-success w-100 shadow">분석하기</button>
+        </div>
+    </form>
+    {% if result %}
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2 class="h5 mb-3">시간대별 트래픽</h2>
+                <canvas id="trafficChart" height="100"></canvas>
+            </div>
+        </div>
+        <script>
+        const chartData = {{ chart_data|tojson }};
+        const labels = chartData.map(item => item[0]);
+        const values = chartData.map(item => item[1]);
+        const ctx = document.getElementById('trafficChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: '요청 수',
+                    data: values,
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {legend: {display: false}},
+                scales: {y: {beginAtZero: true}}
+            }
+        });
+        </script>
+        <div class="card">
+            <div class="card-body">
+                <h2 class="h5 mb-3">패턴 검색 결과</h2>
+                {% if pattern_results %}
+                <div class="table-responsive">
+                <table class="table table-striped table-bordered align-middle">
+                    <thead class="table-light">
+                        <tr><th>시간</th><th>메서드</th><th>URL</th><th>상태</th><th>응답(ms)</th></tr>
+                    </thead>
+                    <tbody>
+                    {% for log in pattern_results %}
+                    <tr>
+                        <td>{{ log.timestamp }}</td>
+                        <td>{{ log.method }}</td>
+                        <td>{{ log.url }}</td>
+                        <td>{{ log.status }}</td>
+                        <td>{{ log.resp_time }}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+                {% else %}
+                <p class="text-muted">검색 결과가 없습니다.</p>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+</body>
+</html> 
