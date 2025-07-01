@@ -1,25 +1,247 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>로그 분석기</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-      body { font-family: 'Noto Sans KR', Arial, sans-serif; }
+        body { 
+            font-family: 'Noto Sans KR', Arial, sans-serif; 
+            transition: all 0.3s ease;
+        }
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 0;
+            margin-bottom: 2rem;
+        }
+        .feature-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            border-radius: 15px;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        .btn-animate {
+            transition: all 0.3s ease;
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-weight: 600;
+        }
+        .btn-animate:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .theme-toggle {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .theme-toggle:hover {
+            transform: rotate(180deg);
+        }
+        .stats-card {
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #0d6efd;
+        }
+        .fade-in {
+            animation: fadeIn 1s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        [data-bs-theme="dark"] .hero-section {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        }
+        [data-bs-theme="dark"] .stats-card {
+            background: linear-gradient(45deg, #343a40, #495057);
+            color: white;
+        }
+        [data-bs-theme="dark"] .stats-number {
+            color: #6ea8fe;
+        }
     </style>
 </head>
 <body class="bg-light">
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4 shadow-sm">
-  <div class="container-fluid">
-    <a class="navbar-brand fw-bold" href="/">로그 분석기</a>
-  </div>
-</nav>
-<div class="container">
-    <div class="text-center mt-5">
-        <h1 class="mb-4 display-5">로그 분석기 메인 페이지</h1>
-        <a href="/analyze" class="btn btn-lg btn-success shadow">로그 파일 분석하러 가기</a>
+    <!-- 네비게이션 바 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="/">
+                <i class="fas fa-chart-line me-2"></i>
+                로그 분석기
+            </a>
+            <div class="navbar-nav ms-auto">
+                <button class="btn btn-outline-light btn-sm theme-toggle" onclick="toggleTheme()" title="테마 변경">
+                    <i class="fas fa-moon" id="theme-icon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 히어로 섹션 -->
+    <section class="hero-section">
+        <div class="container text-center">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <h1 class="display-4 fw-bold mb-4 fade-in">
+                        <i class="fas fa-search me-3"></i>
+                        스마트 로그 분석기
+                    </h1>
+                    <p class="lead mb-4 fade-in">
+                        웹 서버 로그를 분석하여 트래픽 패턴과 성능 지표를 한눈에 확인하세요
+                    </p>
+                    <a href="/analyze" class="btn btn-light btn-lg btn-animate fade-in">
+                        <i class="fas fa-rocket me-2"></i>
+                        분석 시작하기
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 통계 카드 -->
+    <div class="container mb-5">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="stats-card fade-in">
+                    <i class="fas fa-file-alt fa-2x text-primary mb-3"></i>
+                    <div class="stats-number">4</div>
+                    <p class="mb-0">로그 파일</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card fade-in">
+                    <i class="fas fa-clock fa-2x text-success mb-3"></i>
+                    <div class="stats-number">24/7</div>
+                    <p class="mb-0">실시간 분석</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card fade-in">
+                    <i class="fas fa-chart-bar fa-2x text-warning mb-3"></i>
+                    <div class="stats-number">100%</div>
+                    <p class="mb-0">정확도</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card fade-in">
+                    <i class="fas fa-bolt fa-2x text-danger mb-3"></i>
+                    <div class="stats-number">빠름</div>
+                    <p class="mb-0">처리 속도</p>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+
+    <!-- 기능 소개 -->
+    <div class="container">
+        <h2 class="text-center mb-5 display-6">주요 기능</h2>
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="card feature-card h-100 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-chart-pie fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title fw-bold">트래픽 분석</h5>
+                        <p class="card-text">시간대별 요청 패턴을 시각화하여 트래픽 흐름을 파악하세요.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card feature-card h-100 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-search fa-3x text-success mb-3"></i>
+                        <h5 class="card-title fw-bold">패턴 검색</h5>
+                        <p class="card-text">키워드나 정규식을 사용하여 특정 로그 패턴을 빠르게 찾으세요.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card feature-card h-100 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+                        <h5 class="card-title fw-bold">오류 감지</h5>
+                        <p class="card-text">404, 500 등의 오류를 자동으로 감지하고 분석 결과를 제공합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 푸터 -->
+    <footer class="bg-dark text-light text-center py-4 mt-5">
+        <div class="container">
+            <p class="mb-0">
+                <i class="fas fa-code me-2"></i>
+                로그 분석기 v1.0 - 스마트한 로그 분석 솔루션
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 테마 토글 기능
+        function toggleTheme() {
+            const html = document.documentElement;
+            const themeIcon = document.getElementById('theme-icon');
+            const currentTheme = html.getAttribute('data-bs-theme');
+            
+            if (currentTheme === 'dark') {
+                html.setAttribute('data-bs-theme', 'light');
+                themeIcon.className = 'fas fa-moon';
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.setAttribute('data-bs-theme', 'dark');
+                themeIcon.className = 'fas fa-sun';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // 페이지 로드 시 저장된 테마 적용
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-bs-theme', savedTheme);
+            
+            const themeIcon = document.getElementById('theme-icon');
+            if (savedTheme === 'dark') {
+                themeIcon.className = 'fas fa-sun';
+            }
+        });
+
+        // 스크롤 애니메이션
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // 모든 카드에 애니메이션 적용
+        document.querySelectorAll('.feature-card, .stats-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+    </script>
 </body>
 </html> 
