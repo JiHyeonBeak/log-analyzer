@@ -194,113 +194,191 @@
                         <div class="card-body">
                             <i class="fas fa-clock fa-2x text-primary mb-2"></i>
                             <h5 class="card-title">총 요청 수</h5>
-                            <p class="display-6 fw-bold text-primary">{{ pattern_results|length if pattern_results else 0 }}</p>
+                            <p class="display-6 fw-bold text-primary">{{ chart_data|sum(attribute=1) }}</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="card text-center">
                         <div class="card-body">
-                            <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
-                            <h5 class="card-title">성공 (200)</h5>
-                            <p class="display-6 fw-bold text-success" id="success-count">
-                                {{ pattern_results|length if pattern_results else 0 }}
-                            </p>
+                            <i class="fas fa-network-wired fa-2x text-success mb-2"></i>
+                            <h5 class="card-title">엔드포인트 수</h5>
+                            <p class="display-6 fw-bold text-success">{{ endpoint_data|length }}</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="card text-center">
                         <div class="card-body">
-                            <i class="fas fa-exclamation-triangle fa-2x text-warning mb-2"></i>
-                            <h5 class="card-title">오류 (404/500)</h5>
-                            <p class="display-6 fw-bold text-warning" id="error-count">
-                                {{ pattern_results|length if pattern_results else 0 }}
-                            </p>
+                            <i class="fas fa-bug fa-2x text-danger mb-2"></i>
+                            <h5 class="card-title">에러(4xx/5xx)</h5>
+                            <p class="display-6 fw-bold text-danger">{{ status_data.error_by_time.values()|sum }}</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="card text-center">
                         <div class="card-body">
-                            <i class="fas fa-tachometer-alt fa-2x text-info mb-2"></i>
-                            <h5 class="card-title">평균 응답시간</h5>
-                            <p class="display-6 fw-bold text-info" id="avg-time">
-                                0ms
-                            </p>
+                            <i class="fas fa-chart-line fa-2x text-warning mb-2"></i>
+                            <h5 class="card-title">최고 트래픽 시간</h5>
+                            <p class="display-6 fw-bold text-warning">{{ chart_data|max(attribute=1)|first if chart_data else '-' }}</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 차트 -->
+            <!-- 1. 시간대별 트래픽 분포 -->
             <div class="card mb-4">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">
-                        <i class="fas fa-chart-bar me-2"></i>
-                        시간대별 트래픽 분석
-                    </h5>
-                </div>
                 <div class="card-body">
+                    <h4 class="mb-3"><i class="fas fa-chart-bar me-2"></i>시간대별 요청량 추이</h4>
                     <div class="chart-container">
-                        <canvas id="trafficChart"></canvas>
+                        <img src="{{ url_for('views.plot_image', plot_type='traffic', logfile=selected_file) }}" class="w-100" style="min-height:320px; max-height:400px; object-fit:contain;">
                     </div>
                 </div>
             </div>
 
-            <!-- 검색 결과 테이블 -->
-            <div class="card">
-                <div class="card-header bg-success text-white">
-                    <h5 class="mb-0">
-                        <i class="fas fa-table me-2"></i>
-                        패턴 검색 결과
-                    </h5>
-                </div>
+            <!-- 2. 엔드포인트별 사용 현황 -->
+            <div class="card mb-4">
                 <div class="card-body">
-                    {% if pattern_results %}
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle">
+                    <h4 class="mb-3"><i class="fas fa-list-ul me-2"></i>엔드포인트별 평균 응답시간(그래프)</h4>
+                    <div class="chart-container">
+                        <img src="{{ url_for('views.plot_image', plot_type='endpoint', logfile=selected_file) }}" class="w-100" style="min-height:320px; max-height:400px; object-fit:contain;">
+                    </div>
+                    <div class="table-responsive mt-3">
+                        <table class="table table-striped align-middle">
                             <thead>
                                 <tr>
-                                    <th><i class="fas fa-clock me-1"></i>시간</th>
-                                    <th><i class="fas fa-code me-1"></i>메서드</th>
-                                    <th><i class="fas fa-link me-1"></i>URL</th>
-                                    <th><i class="fas fa-info-circle me-1"></i>상태</th>
-                                    <th><i class="fas fa-tachometer-alt me-1"></i>응답시간</th>
+                                    <th>엔드포인트</th>
+                                    <th>호출수</th>
+                                    <th>평균 응답(ms)</th>
+                                    <th>90% 응답(ms)</th>
                                 </tr>
                             </thead>
                             <tbody>
-                            {% for log in pattern_results %}
-                            <tr>
-                                <td>
-                                    <span class="badge bg-secondary">{{ log.timestamp }}</span>
-                                </td>
-                                <td>
-                                    <span class="badge bg-primary">{{ log.method }}</span>
-                                </td>
-                                <td>
-                                    <code class="text-break">{{ log.url }}</code>
-                                </td>
-                                <td>
-                                    <span class="badge status-{{ log.status }} bg-light">
-                                        {{ log.status }}
-                                    </span>
-                                </td>
-                                <td>
-                                    <span class="badge bg-info">{{ log.resp_time }}</span>
-                                </td>
-                            </tr>
-                            {% endfor %}
+                                {% for ep in endpoint_data %}
+                                <tr>
+                                    <td>{{ ep.url }}</td>
+                                    <td>{{ ep.count }}</td>
+                                    <td>{{ ep.avg_time|round(1) }}</td>
+                                    <td>{{ ep.p90 if ep.p90 is defined else '-' }}</td>
+                                </tr>
+                                {% endfor %}
                             </tbody>
                         </table>
                     </div>
-                    {% else %}
-                    <div class="alert alert-info alert-custom text-center">
-                        <i class="fas fa-info-circle fa-2x mb-3"></i>
-                        <h5>검색 결과가 없습니다</h5>
-                        <p class="mb-0">다른 키워드로 검색해보세요.</p>
+                </div>
+            </div>
+
+            <!-- 3. 상태 코드 분포 -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4 class="mb-3"><i class="fas fa-traffic-light me-2"></i>상태 코드 분포</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <table class="table table-bordered">
+                                <thead><tr><th>상태 코드</th><th>건수</th></tr></thead>
+                                <tbody>
+                                {% for code, cnt in status_data.code_counter.items() %}
+                                <tr>
+                                    <td>{{ code }}</td>
+                                    <td>{{ cnt }}</td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <img src="{{ url_for('views.plot_image', plot_type='status', logfile=selected_file) }}" class="w-100" style="min-height:320px; max-height:400px; object-fit:contain;">
+                        </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- 4. 느린 요청/엔드포인트 -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="mb-3"><i class="fas fa-hourglass-half me-2"></i>처리시간 상위 10개 요청</h4>
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover">
+                                    <thead><tr><th>시간</th><th>메소드</th><th>IP</th><th>엔드포인트</th><th>상태</th><th>응답(ms)</th></tr></thead>
+                                    <tbody>
+                                    {% for req in slowreqs %}
+                                    <tr>
+                                        <td>{{ req.timestamp }}</td>
+                                        <td>{{ req.method }}</td>
+                                        <td>{{ req.ip }}</td>
+                                        <td>{{ req.url }}</td>
+                                        <td>{{ req.status }}</td>
+                                        <td>{{ req.resp_time }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="mb-3"><i class="fas fa-tachometer-alt me-2"></i>가장 느린 엔드포인트 Top 5</h4>
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover">
+                                    <thead><tr><th>엔드포인트</th><th>호출수</th><th>평균(ms)</th><th>90% 응답(ms)</th></tr></thead>
+                                    <tbody>
+                                    {% for ep in slowest_eps %}
+                                    <tr>
+                                        <td>{{ ep.url }}</td>
+                                        <td>{{ ep.count }}</td>
+                                        <td>{{ ep.avg_time|round(1) }}</td>
+                                        <td>{{ ep.p90 if ep.p90 is defined else '-' }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. 추가 인사이트(특이 패턴) -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4 class="mb-3"><i class="fas fa-lightbulb me-2"></i>추가 인사이트/특이 패턴</h4>
+                    {% if anomalies.spike_hours %}
+                        <div class="alert alert-warning alert-custom mb-2">
+                            <b>응답시간 급증 시간대:</b>
+                            {{ anomalies.spike_hours|join(', ') }}
+                        </div>
                     {% endif %}
+                    {% if anomalies.top_ips %}
+                        <div class="alert alert-info alert-custom mb-0">
+                            <b>요청이 많은 IP Top 5:</b>
+                            {% for ip, cnt in anomalies.top_ips %}
+                                <span class="badge bg-primary">{{ ip }} ({{ cnt }}회)</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    {% if not anomalies.spike_hours and not anomalies.top_ips %}
+                        <div class="alert alert-secondary alert-custom mb-0">
+                            특이 패턴이 발견되지 않았습니다.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- 6. 개선 방안 제안 -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4 class="mb-3"><i class="fas fa-tools me-2"></i>성능 개선 및 오류 감소 제안</h4>
+                    <ul class="list-group list-group-flush">
+                        {% for s in improvements %}
+                        <li class="list-group-item">{{ s }}</li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
         </div>
