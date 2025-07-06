@@ -4,6 +4,8 @@ import matplotlib
 matplotlib.use('Agg')  # 서버 환경에서 Tkinter 없이 이미지 저장용 백엔드 사용
 import matplotlib.pyplot as plt
 import seaborn as sns
+
+
 from flask import Blueprint, render_template, request, current_app, send_file
 from .utils import parse_log_line, search_pattern, traffic_by_hour, endpoint_stats, status_code_stats, slow_requests, slowest_endpoints, detect_anomalies, suggest_improvements
 
@@ -73,58 +75,191 @@ def analyze():
 
 @bp.route('/analyze/plot/<plot_type>')
 def plot_image(plot_type):
-    # 분석 결과를 그래프로 그려 PNG 이미지로 반환하는 라우트
-    logfile = request.args.get('logfile')  # 쿼리스트링에서 파일명 받기
-    if not logfile:
-        return '', 404  # 파일명 없으면 404
+    try:
+        # 분석 결과를 그래프로 그려 PNG 이미지로 반환하는 라우트
+        logfile = request.args.get('logfile')  # 쿼리스트링에서 파일명 받기
+        print(f"DEBUG: Plot request - type: {plot_type}, logfile: {logfile}")  # 디버깅
+        
+        if not logfile:
+            print("DEBUG: No logfile provided")
+            return '', 404  # 파일명 없으면 404
+        
+
+            
+        file_path = os.path.join(LOG_DIR, logfile)
+        if not os.path.exists(file_path):
+            print(f"DEBUG: File not found - {file_path}")
+            return '', 404  # 파일 없으면 404
+            
+        # 로그 파일 읽고 파싱
+        with open(file_path, encoding='utf-8') as f:
+            lines = f.read().splitlines()
+        logs = [parse_log_line(line) for line in lines]
+        logs = [log for log in logs if log]
+        print(f"DEBUG: Parsed {len(logs)} valid log entries")  # 디버깅
+        
+        buf = io.BytesIO()  # 이미지 임시 저장 버퍼
+        
+        # matplotlib 설정 초기화
+        plt.rcParams['figure.figsize'] = (12, 6)
+        plt.rcParams['font.size'] = 10
+        plt.rcParams['axes.unicode_minus'] = False
+        
+        fig, ax = plt.subplots(figsize=(12, 6))
+        plt.style.use('default')  # 기본 스타일 사용
+        
+        # 그래프 종류별 분기
+        if plot_type == 'traffic':
+            # 시간대별 트래픽 (Line Chart)
+            data = traffic_by_hour(logs)
+            print(f"DEBUG: Traffic data - {len(data)} points")  # 디버깅
+            if data:
+                x = [d[0] for d in data]
+                y = [d[1] for d in data]
+                
+                # 시간 라벨을 더 간단하게 표시
+                x_labels = [hour.split(' ')[1] if ' ' in hour else hour for hour in x]
+                
+                ax.plot(range(len(x)), y, marker='o', linewidth=2, markersize=6, color='#0d6efd')
+                ax.fill_between(range(len(x)), y, alpha=0.3, color='#0d6efd')
+                ax.set_title('Traffic by Hour', fontsize=16, fontweight='bold', pad=30)
+                ax.set_xlabel('Hour', fontsize=12)
+                ax.set_ylabel('Number of Requests', fontsize=12)
+                ax.set_xticks(range(len(x)))
+                ax.set_xticklabels(x_labels, rotation=45, ha='right')
+                ax.grid(True, alpha=0.3)
+                plt.subplots_adjust(top=0.9, bottom=0.15)
+            else:
+                plt.text(0.5, 0.5, 'No data available', ha='center', va='center', transform=plt.gca().transAxes, fontsize=14)
+                plt.title('Traffic by Hour', fontsize=16, fontweight='bold', pad=30)
+                plt.subplots_adjust(top=0.9)
+        elif plot_type == 'endpoint':
+            # 엔드포인트별 평균 응답시간 (Bar Chart)
+            stats = endpoint_stats(logs)
+            print(f"DEBUG: Endpoint data - {len(stats)} endpoints")  # 디버깅
+            if stats:
+                # 상위 20개만 표시 (너무 많으면 그래프가 복잡해짐)
+                stats = sorted(stats, key=lambda x: x['avg_time'], reverse=True)[:20]
+                x = [s['url'] for s in stats]
+                y = [s['avg_time'] for s in stats]
+                
+                # 엔드포인트 이름을 간단하게 표시
+                x_labels = []
+                for url in x:
+                    parts = url.split('/')
+                    if parts[-1]:
+                        x_labels.append(parts[-1])
+                    elif len(parts) > 1:
+                        x_labels.append(parts[-2])
+                    else:
+                        x_labels.append(url)
+                
+                bars = ax.bar(range(len(x)), y, color='#198754', alpha=0.7, edgecolor='#0f5132', linewidth=1)
+                ax.set_title('Average Response Time by Endpoint (Top 20)', fontsize=16, fontweight='bold', pad=30)
+                ax.set_xlabel('Endpoint', fontsize=12)
+                ax.set_ylabel('Average Response Time (ms)', fontsize=12)
+                ax.set_xticks(range(len(x)))
+                ax.set_xticklabels(x_labels, rotation=45, ha='right')
+                ax.grid(True, alpha=0.3, axis='y')
+                
+                # 막대 위에 값 표시
+                for i, bar in enumerate(bars):
+                    height = bar.get_height()
+                    ax.text(bar.get_x() + bar.get_width()/2., height + max(y)*0.01,
+                            f'{height:.0f}ms', ha='center', va='bottom', fontsize=10)
+                
+                plt.subplots_adjust(top=0.9, bottom=0.2)
+            else:
+                plt.text(0.5, 0.5, 'No data available', ha='center', va='center', transform=plt.gca().transAxes, fontsize=14)
+                plt.title('Average Response Time by Endpoint', fontsize=16, fontweight='bold', pad=30)
+                plt.subplots_adjust(top=0.9)
+        elif plot_type == 'status':
+            # 상태 코드 분포 (Pie Chart)
+            from collections import Counter
+            codes = [log['status'] for log in logs]
+            counter = Counter(codes)
+            if counter:
+                labels = list(counter.keys())
+                sizes = list(counter.values())
+                
+                # 색상 설정 (상태 코드별로 다른 색상)
+                colors = []
+                for code in labels:
+                    if code.startswith('2'):
+                        colors.append('#198754')  # 성공 - 초록
+                    elif code.startswith('4'):
+                        colors.append('#fd7e14')  # 클라이언트 에러 - 주황
+                    elif code.startswith('5'):
+                        colors.append('#dc3545')  # 서버 에러 - 빨강
+                    else:
+                        colors.append('#6c757d')  # 기타 - 회색
+                
+                ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, 
+                       colors=colors, explode=[0.05]*len(sizes), shadow=True)
+                ax.set_title('Status Code Distribution', fontsize=16, fontweight='bold', pad=30)
+                plt.subplots_adjust(top=0.9)
+            else:
+                plt.text(0.5, 0.5, 'No data available', ha='center', va='center', transform=plt.gca().transAxes, fontsize=14)
+                plt.title('Status Code Distribution', fontsize=16, fontweight='bold', pad=30)
+                plt.subplots_adjust(top=0.9)
+        else:
+            # 지원하지 않는 plot_type
+            return '', 404
+            
+        # 그래프를 PNG로 저장 후 응답
+        fig.savefig(buf, format='png', dpi=100, bbox_inches='tight')
+        plt.close(fig)
+        buf.seek(0)
+        
+        response = send_file(buf, mimetype='image/png')
+        response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '0'
+        return response
+        
+    except Exception as e:
+        print(f"DEBUG: Error generating plot - {e}")  # 디버깅
+        return '', 500
+
+@bp.route('/errors/<logfile>')
+def show_errors(logfile):
+    # 에러 로그를 보여주는 라우트
     file_path = os.path.join(LOG_DIR, logfile)
     if not os.path.exists(file_path):
-        return '', 404  # 파일 없으면 404
+        return '', 404
+    
     # 로그 파일 읽고 파싱
     with open(file_path, encoding='utf-8') as f:
         lines = f.read().splitlines()
     logs = [parse_log_line(line) for line in lines]
     logs = [log for log in logs if log]
-    buf = io.BytesIO()  # 이미지 임시 저장 버퍼
-    plt.figure(figsize=(12,5))  # 그래프 크기 통일
-    # 그래프 종류별 분기
-    if plot_type == 'traffic':
-        # 시간대별 트래픽 (Line Chart)
-        data = traffic_by_hour(logs)
-        x = [d[0] for d in data]
-        y = [d[1] for d in data]
-        sns.lineplot(x=x, y=y, marker='o')
-        plt.title('Traffic by Hour')
-        plt.xlabel('Hour')
-        plt.ylabel('Requests')
-        plt.xticks(rotation=45, ha='right')
-        plt.tight_layout()
-    elif plot_type == 'endpoint':
-        # 엔드포인트별 평균 응답시간 (Bar Chart)
-        stats = endpoint_stats(logs)
-        x = [s['url'] for s in stats]
-        y = [s['avg_time'] for s in stats]
-        sns.barplot(x=x, y=y)
-        plt.title('Average Response Time by Endpoint')
-        plt.xlabel('Endpoint')
-        plt.ylabel('Avg Response (ms)')
-        plt.xticks(rotation=45, ha='right')
-        plt.tight_layout()
-    elif plot_type == 'status':
-        # 상태 코드 분포 (Pie Chart)
-        from collections import Counter
-        codes = [log['status'] for log in logs]
-        counter = Counter(codes)
-        labels = list(counter.keys())
-        sizes = list(counter.values())
-        plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90)
-        plt.title('Status Code Ratio')
-        plt.tight_layout()
-    else:
-        # 지원하지 않는 plot_type
-        return '', 404
-    # 그래프를 PNG로 저장 후 응답
-    plt.savefig(buf, format='png')
-    plt.close()
-    buf.seek(0)
-    return send_file(buf, mimetype='image/png') 
+    
+    # 4xx, 5xx 에러만 필터링
+    error_logs = [log for log in logs if log['status'].startswith('4') or log['status'].startswith('5')]
+    
+    # 에러별로 그룹화
+    error_stats = {}
+    error_4xx_count = 0
+    error_5xx_count = 0
+    
+    for log in error_logs:
+        status = log['status']
+        if status not in error_stats:
+            error_stats[status] = []
+        error_stats[status].append(log)
+        
+        # 4xx, 5xx 카운트
+        if status.startswith('4'):
+            error_4xx_count += 1
+        elif status.startswith('5'):
+            error_5xx_count += 1
+    
+    return render_template(
+        'errors.html',
+        logfile=logfile,
+        error_logs=error_logs,
+        error_stats=error_stats,
+        total_errors=len(error_logs),
+        error_4xx_count=error_4xx_count,
+        error_5xx_count=error_5xx_count
+    ) 

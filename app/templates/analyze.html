@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>로그 분석</title>
+    <title>Magpie Log Analyzer</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -31,10 +32,14 @@
             border-radius: 25px;
             padding: 10px 25px;
             transition: all 0.3s ease;
+            background-color: #1e40af;
+            border-color: #1e40af;
         }
         .btn-success:hover {
             transform: scale(1.05);
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            background-color: #1e3a8a;
+            border-color: #1e3a8a;
         }
         h1, h2, .navbar-brand { 
             font-weight: 700; 
@@ -45,8 +50,8 @@
             transition: all 0.3s ease;
         }
         .form-control:focus, .form-select:focus {
-            border-color: #0d6efd;
-            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
         }
         .theme-toggle {
             cursor: pointer;
@@ -77,14 +82,18 @@
             background: linear-gradient(45deg, #f8f9fa, #e9ecef);
             border: none;
             font-weight: 600;
+            color: #1e40af;
         }
-        .status-200 { color: #198754; }
-        .status-404 { color: #fd7e14; }
-        .status-500 { color: #dc3545; }
+        .status-200 { color: #1e40af; }
+        .status-404 { color: #3b82f6; }
+        .status-500 { color: #1e3a8a; }
         .loading-spinner {
             display: none;
             text-align: center;
             padding: 2rem;
+        }
+        .spinner-border.text-primary {
+            color: #3b82f6 !important;
         }
         .chart-container {
             position: relative;
@@ -101,20 +110,147 @@
             border-color: #495057;
             color: white;
         }
+        
+        /* 야간 모드에서 흰 배경 위의 글씨를 더 진하게 */
+        [data-bs-theme="dark"] .card {
+            background-color: #2d3748;
+            color: #e2e8f0;
+        }
+        
+        [data-bs-theme="dark"] .card-body {
+            color: #e2e8f0;
+        }
+        
+        [data-bs-theme="dark"] .form-label {
+            color: #f7fafc !important;
+            font-weight: 600;
+        }
+        
+        [data-bs-theme="dark"] .text-muted {
+            color: #cbd5e0 !important;
+        }
+        
+        /* 야간 모드에서 lead 클래스(설명 텍스트)를 짙은 회색으로 */
+        [data-bs-theme="dark"] .lead {
+            color: #374151 !important;
+        }
+        
+        [data-bs-theme="dark"] h1, 
+        [data-bs-theme="dark"] h3, 
+        [data-bs-theme="dark"] h4, 
+        [data-bs-theme="dark"] h5, 
+        [data-bs-theme="dark"] h6 {
+            color: #f7fafc !important;
+        }
+        
+        /* 야간 모드에서 h2 제목들을 짙은 회색으로 */
+        [data-bs-theme="dark"] h2 {
+            color: #374151 !important;
+        }
+        
+        /* 야간 모드에서 display 클래스들도 짙은 회색으로 */
+        [data-bs-theme="dark"] .display-1,
+        [data-bs-theme="dark"] .display-2,
+        [data-bs-theme="dark"] .display-3,
+        [data-bs-theme="dark"] .display-4,
+        [data-bs-theme="dark"] .display-5,
+        [data-bs-theme="dark"] .display-6 {
+            color: #374151 !important;
+        }
+        
+        [data-bs-theme="dark"] .card-title {
+            color: #f7fafc !important;
+        }
+        
+        [data-bs-theme="dark"] .table {
+            color: #e2e8f0;
+        }
+        
+        [data-bs-theme="dark"] .table td {
+            color: #e2e8f0;
+        }
+        
+        [data-bs-theme="dark"] .list-group-item {
+            background-color: #2d3748;
+            color: #e2e8f0;
+            border-color: #4a5568;
+        }
+        
+        /* 야간 모드에서 더보기/접기 버튼 글씨를 흰색으로 */
+        [data-bs-theme="dark"] .btn-outline-primary {
+            color: #ffffff !important;
+            border-color: #3b82f6;
+        }
+        
+        [data-bs-theme="dark"] .btn-outline-primary:hover {
+            color: #ffffff !important;
+            background-color: #3b82f6;
+        }
+        
+        [data-bs-theme="dark"] .btn-outline-secondary {
+            color: #ffffff !important;
+            border-color: #6c757d;
+        }
+        
+        [data-bs-theme="dark"] .btn-outline-secondary:hover {
+            color: #ffffff !important;
+            background-color: #6c757d;
+        }
+        
+        /* 야간 모드에서 통계 카드의 숫자들을 흰색으로 */
+        [data-bs-theme="dark"] .stats-card .display-6 {
+            color: #ffffff !important;
+        }
+        
+        [data-bs-theme="dark"] .stats-card .card-title {
+            color: #ffffff !important;
+        }
+        
+        [data-bs-theme="dark"] .stats-card small {
+            color: #e2e8f0 !important;
+        }
+        
+        /* 야간 모드에서 네비게이션 바 브랜드 제목을 흰색으로 */
+        [data-bs-theme="dark"] .navbar-brand {
+            color: #ffffff !important;
+        }
         .alert-custom {
             border-radius: 15px;
             border: none;
             padding: 1rem 1.5rem;
         }
+        .stats-card {
+            height: 100%;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+        }
+        .stats-card .card-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .chart-image {
+            transition: opacity 0.3s ease;
+        }
+        .chart-container {
+            position: relative;
+            min-height: 320px;
+        }
+        .chart-container {
+            position: relative;
+            min-height: 320px;
+        }
     </style>
 </head>
 <body class="bg-light">
     <!-- 네비게이션 바 -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #60a5fa !important;" shadow-sm sticky-top>
         <div class="container">
             <a class="navbar-brand fw-bold d-flex align-items-center" href="/">
-                <i class="fas fa-chart-line me-2"></i>
-                로그 분석기
+                <img src="{{ url_for('static', filename='magpie.png', v=1) }}" alt="Magpie" width="32" height="32" class="me-2">
+                Magpie Log Analyzer
             </a>
             <div class="navbar-nav ms-auto">
                 <button class="btn btn-outline-light btn-sm theme-toggle" onclick="toggleTheme()" title="테마 변경">
@@ -190,7 +326,7 @@
             <!-- 요약 통계 -->
             <div class="row mb-4">
                 <div class="col-md-3">
-                    <div class="card text-center">
+                    <div class="card text-center stats-card">
                         <div class="card-body">
                             <i class="fas fa-clock fa-2x text-primary mb-2"></i>
                             <h5 class="card-title">총 요청 수</h5>
@@ -199,53 +335,112 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="card text-center">
+                    <div class="card text-center stats-card">
                         <div class="card-body">
-                            <i class="fas fa-network-wired fa-2x text-success mb-2"></i>
+                            <i class="fas fa-network-wired fa-2x text-info mb-2"></i>
                             <h5 class="card-title">엔드포인트 수</h5>
-                            <p class="display-6 fw-bold text-success">{{ endpoint_data|length }}</p>
+                            <p class="display-6 fw-bold text-info">{{ endpoint_data|length }}</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="card text-center">
-                        <div class="card-body">
-                            <i class="fas fa-bug fa-2x text-danger mb-2"></i>
-                            <h5 class="card-title">에러(4xx/5xx)</h5>
-                            <p class="display-6 fw-bold text-danger">{{ status_data.error_by_time.values()|sum }}</p>
+                    <a href="{{ url_for('views.show_errors', logfile=selected_file) }}" class="text-decoration-none">
+                        <div class="card text-center stats-card" style="cursor: pointer;">
+                            <div class="card-body">
+                                <i class="fas fa-bug fa-2x text-danger mb-2"></i>
+                                <h5 class="card-title">에러(4xx/5xx)</h5>
+                                <p class="display-6 fw-bold text-danger">{{ status_data.error_by_time.values()|sum }}</p>
+                                <small class="text-muted">클릭하여 상세 보기</small>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 <div class="col-md-3">
-                    <div class="card text-center">
+                    <div class="card text-center stats-card">
                         <div class="card-body">
-                            <i class="fas fa-chart-line fa-2x text-warning mb-2"></i>
+                            <i class="fas fa-chart-line fa-2x text-info mb-2"></i>
                             <h5 class="card-title">최고 트래픽 시간</h5>
-                            <p class="display-6 fw-bold text-warning">{{ chart_data|max(attribute=1)|first if chart_data else '-' }}</p>
+                            <p class="display-6 fw-bold text-info">{{ chart_data|max(attribute=1)|first if chart_data else '-' }}</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 1. 시간대별 트래픽 분포 -->
+            <!-- 1. 패턴 검색 결과 -->
+            {% if pattern_results and keyword %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4 class="mb-3">
+                        <i class="fas fa-search me-2"></i>
+                        패턴 검색 결과: "{{ keyword }}"
+                        <span class="badge bg-primary ms-2">{{ pattern_results|length }}건</span>
+                    </h4>
+                    {% if pattern_results %}
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover">
+                            <thead>
+                                <tr>
+                                    <th>시간</th>
+                                    <th>메소드</th>
+                                    <th>IP</th>
+                                    <th>엔드포인트</th>
+                                    <th>상태</th>
+                                    <th>응답(ms)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for log in pattern_results %}
+                            <tr>
+                                <td>{{ log.timestamp }}</td>
+                                <td><span class="badge bg-secondary">{{ log.method }}</span></td>
+                                <td>{{ log.ip }}</td>
+                                <td><code>{{ log.url }}</code></td>
+                                <td>
+                                    {% if log.status.startswith('2') %}
+                                        <span class="badge bg-success">{{ log.status }}</span>
+                                    {% elif log.status.startswith('4') %}
+                                        <span class="badge bg-warning">{{ log.status }}</span>
+                                    {% elif log.status.startswith('5') %}
+                                        <span class="badge bg-danger">{{ log.status }}</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{{ log.status }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ log.resp_time }}ms</td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        "{{ keyword }}"와 일치하는 로그가 없습니다.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- 2. 시간대별 트래픽 분포 -->
             <div class="card mb-4">
                 <div class="card-body">
                     <h4 class="mb-3"><i class="fas fa-chart-bar me-2"></i>시간대별 요청량 추이</h4>
                     <div class="chart-container">
-                        <img src="{{ url_for('views.plot_image', plot_type='traffic', logfile=selected_file) }}" class="w-100" style="min-height:320px; max-height:400px; object-fit:contain;">
+                        <img id="traffic-chart" src="{{ url_for('views.plot_image', plot_type='traffic', logfile=selected_file) }}" class="w-100 chart-image" style="min-height:320px; max-height:400px; object-fit:contain;" alt="시간대별 트래픽">
                     </div>
                 </div>
             </div>
 
-            <!-- 2. 엔드포인트별 사용 현황 -->
+            <!-- 3. 엔드포인트별 사용 현황 -->
             <div class="card mb-4">
                 <div class="card-body">
                     <h4 class="mb-3"><i class="fas fa-list-ul me-2"></i>엔드포인트별 평균 응답시간(그래프)</h4>
                     <div class="chart-container">
-                        <img src="{{ url_for('views.plot_image', plot_type='endpoint', logfile=selected_file) }}" class="w-100" style="min-height:320px; max-height:400px; object-fit:contain;">
+                        <img id="endpoint-chart" src="{{ url_for('views.plot_image', plot_type='endpoint', logfile=selected_file) }}" class="w-100 chart-image" style="min-height:320px; max-height:400px; object-fit:contain;" alt="엔드포인트별 응답시간">
                     </div>
                     <div class="table-responsive mt-3">
-                        <table class="table table-striped align-middle">
+                        <table class="table table-striped align-middle" id="endpoint-table">
                             <thead>
                                 <tr>
                                     <th>엔드포인트</th>
@@ -255,8 +450,16 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for ep in endpoint_data %}
-                                <tr>
+                                {% for ep in endpoint_data[:5] %}
+                                <tr class="endpoint-row">
+                                    <td>{{ ep.url }}</td>
+                                    <td>{{ ep.count }}</td>
+                                    <td>{{ ep.avg_time|round(1) }}</td>
+                                    <td>{{ ep.p90 if ep.p90 is defined else '-' }}</td>
+                                </tr>
+                                {% endfor %}
+                                {% for ep in endpoint_data[5:] %}
+                                <tr class="endpoint-row hidden-row" style="display: none;">
                                     <td>{{ ep.url }}</td>
                                     <td>{{ ep.count }}</td>
                                     <td>{{ ep.avg_time|round(1) }}</td>
@@ -265,16 +468,23 @@
                                 {% endfor %}
                             </tbody>
                         </table>
+                        {% if endpoint_data|length > 5 %}
+                        <div class="text-center mt-3">
+                            <button type="button" class="btn btn-outline-primary" id="showMoreBtn" onclick="toggleEndpointRows()">
+                                <i class="fas fa-chevron-down me-2"></i>더보기 ({{ endpoint_data|length - 5 }}개 더)
+                            </button>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
 
-            <!-- 3. 상태 코드 분포 -->
+            <!-- 4. 상태 코드 분포 -->
             <div class="card mb-4">
                 <div class="card-body">
                     <h4 class="mb-3"><i class="fas fa-traffic-light me-2"></i>상태 코드 분포</h4>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <table class="table table-bordered">
                                 <thead><tr><th>상태 코드</th><th>건수</th></tr></thead>
                                 <tbody>
@@ -287,14 +497,14 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="col-md-6">
-                            <img src="{{ url_for('views.plot_image', plot_type='status', logfile=selected_file) }}" class="w-100" style="min-height:320px; max-height:400px; object-fit:contain;">
+                        <div class="col-md-8">
+                            <img id="status-chart" src="{{ url_for('views.plot_image', plot_type='status', logfile=selected_file) }}" class="w-100 chart-image" style="min-height:320px; max-height:400px; object-fit:contain;" alt="상태 코드 분포">
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 4. 느린 요청/엔드포인트 -->
+            <!-- 5. 느린 요청/엔드포인트 -->
             <div class="row mb-4">
                 <div class="col-md-6">
                     <div class="card">
@@ -344,18 +554,18 @@
                 </div>
             </div>
 
-            <!-- 5. 추가 인사이트(특이 패턴) -->
+            <!-- 6. 추가 인사이트(특이 패턴) -->
             <div class="card mb-4">
                 <div class="card-body">
                     <h4 class="mb-3"><i class="fas fa-lightbulb me-2"></i>추가 인사이트/특이 패턴</h4>
                     {% if anomalies.spike_hours %}
-                        <div class="alert alert-warning alert-custom mb-2">
+                        <div class="alert alert-info alert-custom mb-2">
                             <b>응답시간 급증 시간대:</b>
                             {{ anomalies.spike_hours|join(', ') }}
                         </div>
                     {% endif %}
                     {% if anomalies.top_ips %}
-                        <div class="alert alert-info alert-custom mb-0">
+                        <div class="alert alert-primary alert-custom mb-0">
                             <b>요청이 많은 IP Top 5:</b>
                             {% for ip, cnt in anomalies.top_ips %}
                                 <span class="badge bg-primary">{{ ip }} ({{ cnt }}회)</span>
@@ -370,7 +580,7 @@
                 </div>
             </div>
 
-            <!-- 6. 개선 방안 제안 -->
+            <!-- 7. 개선 방안 제안 -->
             <div class="card mb-4">
                 <div class="card-body">
                     <h4 class="mb-3"><i class="fas fa-tools me-2"></i>성능 개선 및 오류 감소 제안</h4>
@@ -390,7 +600,7 @@
         <div class="container">
             <p class="mb-0">
                 <i class="fas fa-code me-2"></i>
-                로그 분석기 v1.0 - 스마트한 로그 분석 솔루션
+                맥파이 로그 분석기 v1.0 - 스마트한 로그 분석 솔루션
             </p>
         </div>
     </footer>
@@ -432,75 +642,43 @@
             document.getElementById('analyzeBtn').innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>분석 중...';
         });
 
-        // 차트 생성 (결과가 있을 때만)
-        {% if result %}
-        const chartData = {{ chart_data|tojson }};
-        const labels = chartData.map(item => item[0]);
-        const values = chartData.map(item => item[1]);
-        
-        const ctx = document.getElementById('trafficChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: '요청 수',
-                    data: values,
-                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 2,
-                    borderRadius: 8,
-                    borderSkipped: false,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                        titleColor: 'white',
-                        bodyColor: 'white',
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1,
-                        cornerRadius: 8,
-                        displayColors: false
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            color: 'rgba(0, 0, 0, 0.1)',
-                            drawBorder: false
-                        },
-                        ticks: {
-                            font: {
-                                size: 12
-                            }
-                        }
-                    },
-                    x: {
-                        grid: {
-                            display: false
-                        },
-                        ticks: {
-                            font: {
-                                size: 12
-                            }
-                        }
-                    }
-                },
-                animation: {
-                    duration: 2000,
-                    easing: 'easeInOutQuart'
-                }
-            }
+        // 이미지 로딩 안정화
+        document.addEventListener('DOMContentLoaded', function() {
+            const chartImages = document.querySelectorAll('.chart-image');
+            
+            chartImages.forEach(function(img) {
+                // 이미지 로드 이벤트 설정
+                img.addEventListener('load', function() {
+                    this.classList.add('loaded');
+                });
+                
+                img.addEventListener('error', function() {
+                    console.error('이미지 로딩 실패:', this.id);
+                });
+            });
         });
-        {% endif %}
+
+        // 엔드포인트 테이블 더보기/접기 기능
+        function toggleEndpointRows() {
+            const hiddenRows = document.querySelectorAll('.hidden-row');
+            const showMoreBtn = document.getElementById('showMoreBtn');
+            const isHidden = hiddenRows[0].style.display === 'none';
+            
+            hiddenRows.forEach(function(row) {
+                row.style.display = isHidden ? 'table-row' : 'none';
+            });
+            
+            if (isHidden) {
+                showMoreBtn.innerHTML = '<i class="fas fa-chevron-up me-2"></i>접기';
+                showMoreBtn.classList.remove('btn-outline-primary');
+                showMoreBtn.classList.add('btn-outline-secondary');
+            } else {
+                showMoreBtn.innerHTML = '<i class="fas fa-chevron-down me-2"></i>더보기';
+                showMoreBtn.classList.remove('btn-outline-secondary');
+                showMoreBtn.classList.add('btn-outline-primary');
+            }
+        }
+
     </script>
 </body>
 </html> 

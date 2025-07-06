@@ -19,8 +19,13 @@ def parse_log_line(line):
     return None
 
 def search_pattern(logs, keyword):
-    # URL, 상태코드 등에서 keyword가 포함된 로그만 반환
-    return [log for log in logs if keyword in log['url'] or keyword in log['status']]
+    # URL, 상태코드, 메소드, IP 등에서 keyword가 포함된 로그만 반환
+    keyword_lower = keyword.lower()
+    return [log for log in logs if 
+            keyword_lower in log['url'].lower() or 
+            keyword_lower in log['status'].lower() or 
+            keyword_lower in log['method'].lower() or 
+            keyword_lower in log['ip'].lower()]
 
 def traffic_by_hour(logs):
     # 시간대별 트래픽(요청 수) 집계

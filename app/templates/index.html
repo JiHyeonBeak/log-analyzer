@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>로그 분석기</title>
+    <title>Magpie Log Analyzer</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -13,7 +14,7 @@
             transition: all 0.3s ease;
         }
         .hero-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
             color: white;
             padding: 4rem 0;
             margin-bottom: 2rem;
@@ -54,7 +55,7 @@
         .stats-number {
             font-size: 2.5rem;
             font-weight: 700;
-            color: #0d6efd;
+            color: #1e40af;
         }
         .fade-in {
             animation: fadeIn 1s ease-in;
@@ -71,17 +72,60 @@
             color: white;
         }
         [data-bs-theme="dark"] .stats-number {
-            color: #6ea8fe;
+            color: #60a5fa;
+        }
+        
+        /* 야간 모드에서 h2 제목들을 짙은 회색으로 */
+        [data-bs-theme="dark"] h2 {
+            color: #374151 !important;
+        }
+        
+        /* 야간 모드에서 display 클래스들도 짙은 회색으로 */
+        [data-bs-theme="dark"] .display-1,
+        [data-bs-theme="dark"] .display-2,
+        [data-bs-theme="dark"] .display-3,
+        [data-bs-theme="dark"] .display-4,
+        [data-bs-theme="dark"] .display-5,
+        [data-bs-theme="dark"] .display-6 {
+            color: #374151 !important;
+        }
+        
+        /* 야간 모드에서 카드 스타일 */
+        [data-bs-theme="dark"] .card {
+            background-color: #2d3748;
+            color: #e2e8f0;
+        }
+        
+        [data-bs-theme="dark"] .card-body {
+            color: #e2e8f0;
+        }
+        
+        [data-bs-theme="dark"] .card-title {
+            color: #f7fafc !important;
+        }
+        
+        [data-bs-theme="dark"] .card-text {
+            color: #cbd5e0 !important;
+        }
+        
+        /* 야간 모드에서 히어로 섹션의 제목을 흰색으로 */
+        [data-bs-theme="dark"] .hero-section h1 {
+            color: #ffffff !important;
+        }
+        
+        /* 야간 모드에서 히어로 섹션의 설명 텍스트를 흰색으로 */
+        [data-bs-theme="dark"] .hero-section .lead {
+            color: #ffffff !important;
         }
     </style>
 </head>
 <body class="bg-light">
     <!-- 네비게이션 바 -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #60a5fa !important;" shadow-sm sticky-top>
         <div class="container">
             <a class="navbar-brand fw-bold d-flex align-items-center" href="/">
-                <i class="fas fa-chart-line me-2"></i>
-                로그 분석기
+                <img src="{{ url_for('static', filename='magpie.png', v=1) }}" alt="Magpie" width="32" height="32" class="me-2">
+                Magpie Log analyzer
             </a>
             <div class="navbar-nav ms-auto">
                 <button class="btn btn-outline-light btn-sm theme-toggle" onclick="toggleTheme()" title="테마 변경">
@@ -98,7 +142,7 @@
                 <div class="col-lg-8">
                     <h1 class="display-4 fw-bold mb-4 fade-in">
                         <i class="fas fa-search me-3"></i>
-                        스마트 로그 분석기
+                        맥파이 로그 분석기
                     </h1>
                     <p class="lead mb-4 fade-in">
                         웹 서버 로그를 분석하여 트래픽 패턴과 성능 지표를 한눈에 확인하세요
@@ -112,40 +156,6 @@
         </div>
     </section>
 
-    <!-- 통계 카드 -->
-    <div class="container mb-5">
-        <div class="row">
-            <div class="col-md-3">
-                <div class="stats-card fade-in">
-                    <i class="fas fa-file-alt fa-2x text-primary mb-3"></i>
-                    <div class="stats-number">4</div>
-                    <p class="mb-0">로그 파일</p>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stats-card fade-in">
-                    <i class="fas fa-clock fa-2x text-success mb-3"></i>
-                    <div class="stats-number">24/7</div>
-                    <p class="mb-0">실시간 분석</p>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stats-card fade-in">
-                    <i class="fas fa-chart-bar fa-2x text-warning mb-3"></i>
-                    <div class="stats-number">100%</div>
-                    <p class="mb-0">정확도</p>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stats-card fade-in">
-                    <i class="fas fa-bolt fa-2x text-danger mb-3"></i>
-                    <div class="stats-number">빠름</div>
-                    <p class="mb-0">처리 속도</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- 기능 소개 -->
     <div class="container">
         <h2 class="text-center mb-5 display-6">주요 기능</h2>
@@ -155,25 +165,25 @@
                     <div class="card-body text-center p-4">
                         <i class="fas fa-chart-pie fa-3x text-primary mb-3"></i>
                         <h5 class="card-title fw-bold">트래픽 분석</h5>
-                        <p class="card-text">시간대별 요청 패턴을 시각화하여 트래픽 흐름을 파악하세요.</p>
+                        <p class="card-text">시간대별 요청 패턴을 시각화하여<br>트래픽 흐름을 파악하세요.</p>
                     </div>
                 </div>
             </div>
             <div class="col-lg-4 col-md-6">
                 <div class="card feature-card h-100 shadow-sm">
                     <div class="card-body text-center p-4">
-                        <i class="fas fa-search fa-3x text-success mb-3"></i>
+                        <i class="fas fa-search fa-3x text-info mb-3"></i>
                         <h5 class="card-title fw-bold">패턴 검색</h5>
-                        <p class="card-text">키워드나 정규식을 사용하여 특정 로그 패턴을 빠르게 찾으세요.</p>
+                        <p class="card-text">키워드를 사용하여<br> 특정 로그 패턴을 빠르게 찾으세요.</p>
                     </div>
                 </div>
             </div>
             <div class="col-lg-4 col-md-6">
                 <div class="card feature-card h-100 shadow-sm">
                     <div class="card-body text-center p-4">
-                        <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+                        <i class="fas fa-exclamation-triangle fa-3x text-primary mb-3"></i>
                         <h5 class="card-title fw-bold">오류 감지</h5>
-                        <p class="card-text">404, 500 등의 오류를 자동으로 감지하고 분석 결과를 제공합니다.</p>
+                        <p class="card-text">404, 500 등의 오류를 감지하고<br> 분석 결과를 제공합니다.</p>
                     </div>
                 </div>
             </div>
@@ -185,7 +195,7 @@
         <div class="container">
             <p class="mb-0">
                 <i class="fas fa-code me-2"></i>
-                로그 분석기 v1.0 - 스마트한 로그 분석 솔루션
+                맥파이 로그 분석기 v1.0 - 스마트한 로그 분석 솔루션
             </p>
         </div>
     </footer>
