@@ -7,7 +7,7 @@ import seaborn as sns
 
 
 from flask import Blueprint, render_template, request, current_app, send_file
-from .utils import parse_log_line, search_pattern, traffic_by_hour, endpoint_stats, status_code_stats, slow_requests, slowest_endpoints, detect_anomalies, suggest_improvements
+from .utils import parse_log_line, detect_log_format, convert_log_format, search_pattern, traffic_by_hour, endpoint_stats, status_code_stats, slow_requests, slowest_endpoints, detect_anomalies, suggest_improvements
 
 bp = Blueprint('views', __name__)
 
@@ -35,9 +35,31 @@ def analyze():
             # 로그 파일 읽기
             with open(file_path, encoding='utf-8') as f:
                 lines = f.read().splitlines()
-            # 한 줄씩 파싱 (parse_log_line: utils.py)
-            logs = [parse_log_line(line) for line in lines]
-            logs = [log for log in logs if log]  # 파싱 실패(None) 제거
+            
+            # 로그 형식 자동 감지 (처음 20줄 사용)
+            sample_lines = [line for line in lines[:20] if line.strip()]
+            detected_format = detect_log_format(sample_lines)
+            print(f"DEBUG: Detected format: {detected_format}")
+            print(f"DEBUG: Sample lines: {sample_lines[:3]}")
+            
+            # 로그 파싱
+            logs = []
+            parsed_count = 0
+            for i, line in enumerate(lines):
+                if line.strip():
+                    # 감지된 형식으로 직접 파싱
+                    if detected_format:
+                        log_entry = parse_log_line(line, detected_format)
+                    else:
+                        log_entry = parse_log_line(line, 'standard')
+                    
+                    if log_entry:
+                        logs.append(log_entry)
+                        parsed_count += 1
+                    else:
+                        print(f"DEBUG: Failed to parse line {i+1}: {line[:100]}...")
+            
+            print(f"DEBUG: Total lines: {len(lines)}, Parsed: {parsed_count}, Logs: {len(logs)}")
             # 키워드(패턴) 검색
             if keyword:
                 pattern_results = search_pattern(logs, keyword)
@@ -94,8 +116,24 @@ def plot_image(plot_type):
         # 로그 파일 읽고 파싱
         with open(file_path, encoding='utf-8') as f:
             lines = f.read().splitlines()
-        logs = [parse_log_line(line) for line in lines]
-        logs = [log for log in logs if log]
+        
+        # 로그 형식 자동 감지 (처음 20줄 사용)
+        sample_lines = [line for line in lines[:20] if line.strip()]
+        detected_format = detect_log_format(sample_lines)
+        
+        # 로그 파싱
+        logs = []
+        for line in lines:
+            if line.strip():
+                # 감지된 형식으로 직접 파싱
+                if detected_format:
+                    log_entry = parse_log_line(line, detected_format)
+                else:
+                    log_entry = parse_log_line(line, 'standard')
+                
+                if log_entry:
+                    logs.append(log_entry)
+        
         print(f"DEBUG: Parsed {len(logs)} valid log entries")  # 디버깅
         
         buf = io.BytesIO()  # 이미지 임시 저장 버퍼
@@ -117,17 +155,40 @@ def plot_image(plot_type):
                 x = [d[0] for d in data]
                 y = [d[1] for d in data]
                 
-                # 시간 라벨을 더 간단하게 표시
-                x_labels = [hour.split(' ')[1] if ' ' in hour else hour for hour in x]
+                # 시간 라벨을 더 간단하게 표시 (HH:MM 형식)
+                x_labels = []
+                for hour in x:
+                    if ' ' in hour:
+                        # "2025-06-10 09:00" -> "09:00"
+                        time_part = hour.split(' ')[1]
+                        x_labels.append(time_part)
+                    else:
+                        x_labels.append(hour)
                 
-                ax.plot(range(len(x)), y, marker='o', linewidth=2, markersize=6, color='#0d6efd')
+                # 데이터 포인트가 적을 때는 더 큰 마커와 선 사용
+                marker_size = 8 if len(data) <= 5 else 6
+                line_width = 3 if len(data) <= 5 else 2
+                
+                ax.plot(range(len(x)), y, marker='o', linewidth=line_width, markersize=marker_size, color='#0d6efd')
                 ax.fill_between(range(len(x)), y, alpha=0.3, color='#0d6efd')
-                ax.set_title('Traffic by Hour', fontsize=16, fontweight='bold', pad=30)
-                ax.set_xlabel('Hour', fontsize=12)
+                
+                # 제목에 데이터 범위 표시
+                if len(data) == 1:
+                    title = f'Traffic at {x_labels[0]}'
+                else:
+                    title = f'Traffic from {x_labels[0]} to {x_labels[-1]}'
+                
+                ax.set_title(title, fontsize=16, fontweight='bold', pad=30)
+                ax.set_xlabel('Time', fontsize=12)
                 ax.set_ylabel('Number of Requests', fontsize=12)
                 ax.set_xticks(range(len(x)))
                 ax.set_xticklabels(x_labels, rotation=45, ha='right')
                 ax.grid(True, alpha=0.3)
+                
+                # Y축 범위 조정 (0부터 시작하되 최대값에 여유 추가)
+                if max(y) > 0:
+                    ax.set_ylim(0, max(y) * 1.1)
+                
                 plt.subplots_adjust(top=0.9, bottom=0.15)
             else:
                 plt.text(0.5, 0.5, 'No data available', ha='center', va='center', transform=plt.gca().transAxes, fontsize=14)
@@ -231,8 +292,23 @@ def show_errors(logfile):
     # 로그 파일 읽고 파싱
     with open(file_path, encoding='utf-8') as f:
         lines = f.read().splitlines()
-    logs = [parse_log_line(line) for line in lines]
-    logs = [log for log in logs if log]
+    
+    # 로그 형식 자동 감지 (처음 20줄 사용)
+    sample_lines = [line for line in lines[:20] if line.strip()]
+    detected_format = detect_log_format(sample_lines)
+    
+    # 로그 파싱
+    logs = []
+    for line in lines:
+        if line.strip():
+            # 감지된 형식으로 직접 파싱
+            if detected_format:
+                log_entry = parse_log_line(line, detected_format)
+            else:
+                log_entry = parse_log_line(line, 'standard')
+            
+            if log_entry:
+                logs.append(log_entry)
     
     # 4xx, 5xx 에러만 필터링
     error_logs = [log for log in logs if log['status'].startswith('4') or log['status'].startswith('5')]

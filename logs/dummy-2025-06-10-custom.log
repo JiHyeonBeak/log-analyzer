@@ -1,0 +1,176 @@
+[INFO] 2025-06-10 09:00:15.123 - Client 10.0.1.45 requested GET /api/v1/dashboard with status 200 (response time: 89ms)
+[INFO] 2025-06-10 09:02:34.567 - Client 10.0.1.67 requested POST /api/v1/login with status 201 (response time: 156ms)
+[ERROR] 2025-06-10 09:05:12.890 - Database connection failed: timeout after 30 seconds
+[INFO] 2025-06-10 09:07:28.234 - Client 10.0.1.89 requested GET /api/v1/users with status 200 (response time: 123ms)
+[INFO] 2025-06-10 09:09:45.678 - Client 10.0.1.23 requested PUT /api/v1/settings with status 200 (response time: 78ms)
+[WARN] 2025-06-10 09:12:03.012 - High memory usage detected: 85% of available RAM
+[INFO] 2025-06-10 09:14:20.345 - Client 10.0.1.34 requested DELETE /api/v1/temp with status 204 (response time: 45ms)
+[INFO] 2025-06-10 09:16:37.789 - Client 10.0.1.56 requested GET /api/v1/products with status 200 (response time: 167ms)
+[ERROR] 2025-06-10 09:18:55.123 - File not found: /var/www/uploads/document.pdf
+[INFO] 2025-06-10 09:21:12.456 - Client 10.0.1.12 requested POST /api/v1/cart with status 201 (response time: 189ms)
+[INFO] 2025-06-10 09:23:29.890 - Client 10.0.1.78 requested GET /api/v1/search with status 200 (response time: 234ms)
+[INFO] 2025-06-10 09:25:47.234 - Client 10.0.1.90 requested PUT /api/v1/profile with status 200 (response time: 145ms)
+[ERROR] 2025-06-10 09:28:04.567 - Authentication failed: invalid credentials for user admin
+[INFO] 2025-06-10 09:30:21.901 - Client 10.0.1.45 requested DELETE /api/v1/cache with status 204 (response time: 67ms)
+[INFO] 2025-06-10 09:32:39.234 - Client 10.0.1.67 requested GET /api/v1/notifications with status 200 (response time: 98ms)
+[INFO] 2025-06-10 09:34:56.678 - Client 10.0.1.89 requested POST /api/v1/feedback with status 201 (response time: 178ms)
+[WARN] 2025-06-10 09:37:14.012 - Slow response detected: POST /api/v1/orders took 2341ms
+[INFO] 2025-06-10 09:39:31.345 - Client 10.0.1.23 requested GET /api/v1/status with status 200 (response time: 56ms)
+[ERROR] 2025-06-10 09:41:48.789 - Memory allocation failed: insufficient memory
+[INFO] 2025-06-10 09:44:06.123 - Client 10.0.1.34 requested PUT /api/v1/config with status 200 (response time: 134ms)
+[INFO] 2025-06-10 09:46:23.456 - Client 10.0.1.56 requested DELETE /api/v1/sessions with status 204 (response time: 52ms)
+[INFO] 2025-06-10 09:48:40.890 - Client 10.0.1.12 requested GET /api/v1/analytics with status 200 (response time: 267ms)
+[INFO] 2025-06-10 09:50:58.234 - Client 10.0.1.78 requested POST /api/v1/export with status 202 (response time: 389ms)
+[ERROR] 2025-06-10 09:53:15.567 - Network timeout: external API call failed
+[INFO] 2025-06-10 09:55:32.901 - Client 10.0.1.90 requested GET /api/v1/queue/status with status 200 (response time: 87ms)
+[INFO] 2025-06-10 09:57:50.234 - Client 10.0.1.45 requested PUT /api/v1/preferences with status 200 (response time: 112ms)
+[INFO] 2025-06-10 10:00:07.567 - Client 10.0.1.67 requested DELETE /api/v1/temp with status 204 (response time: 39ms)
+[ERROR] 2025-06-10 10:02:24.901 - Permission denied: cannot write to log file
+[INFO] 2025-06-10 10:04:42.234 - Client 10.0.1.89 requested GET /api/v1/dashboard with status 200 (response time: 91ms)
+[INFO] 2025-06-10 10:06:59.567 - Client 10.0.1.23 requested POST /api/v1/reports with status 201 (response time: 234ms)
+[INFO] 2025-06-10 10:09:16.901 - Client 10.0.1.34 requested GET /api/v1/statistics with status 200 (response time: 156ms)
+[WARN] 2025-06-10 10:11:34.234 - Disk space usage at 92% - cleanup recommended
+[INFO] 2025-06-10 10:13:51.567 - Client 10.0.1.56 requested PUT /api/v1/preferences with status 200 (response time: 78ms)
+[INFO] 2025-06-10 10:16:08.901 - Client 10.0.1.12 requested DELETE /api/v1/temp-data with status 204 (response time: 45ms)
+[ERROR] 2025-06-10 10:18:26.234 - SSL handshake failed: certificate expired
+[INFO] 2025-06-10 10:20:43.567 - Client 10.0.1.78 requested GET /api/v1/notifications with status 200 (response time: 123ms)
+[INFO] 2025-06-10 10:23:00.901 - Client 10.0.1.90 requested POST /api/v1/feedback with status 201 (response time: 189ms)
+[INFO] 2025-06-10 10:25:18.234 - Client 10.0.1.45 requested GET /api/v1/settings with status 200 (response time: 67ms)
+[INFO] 2025-06-10 10:27:35.567 - Client 10.0.1.67 requested PUT /api/v1/profile with status 200 (response time: 145ms)
+[ERROR] 2025-06-10 10:29:52.901 - Database deadlock detected and resolved
+[INFO] 2025-06-10 10:32:10.234 - Client 10.0.1.89 requested DELETE /api/v1/cache with status 204 (response time: 34ms)
+[INFO] 2025-06-10 10:34:27.567 - Client 10.0.1.23 requested GET /api/v1/analytics with status 200 (response time: 267ms)
+[INFO] 2025-06-10 10:36:44.901 - Client 10.0.1.34 requested POST /api/v1/export with status 202 (response time: 456ms)
+[WARN] 2025-06-10 10:39:02.234 - CPU usage spike detected: 95% for 5 minutes
+[INFO] 2025-06-10 10:41:19.567 - Client 10.0.1.56 requested GET /api/v1/queue/status with status 200 (response time: 98ms)
+[INFO] 2025-06-10 10:43:36.901 - Client 10.0.1.12 requested PUT /api/v1/config with status 200 (response time: 178ms)
+[ERROR] 2025-06-10 10:45:54.234 - Disk space full: cannot create temporary file
+[INFO] 2025-06-10 10:48:11.567 - Client 10.0.1.78 requested DELETE /api/v1/sessions with status 204 (response time: 56ms)
+[INFO] 2025-06-10 10:50:28.901 - Client 10.0.1.90 requested GET /api/v1/health with status 200 (response time: 23ms)
+[INFO] 2025-06-10 10:52:46.234 - Client 10.0.1.45 requested POST /api/v1/backup with status 202 (response time: 345ms)
+[INFO] 2025-06-10 10:55:03.567 - Client 10.0.1.67 requested GET /api/v1/metrics with status 200 (response time: 134ms)
+[ERROR] 2025-06-10 10:57:20.901 - Rate limit exceeded: too many requests from IP 10.0.1.100
+[INFO] 2025-06-10 10:59:38.234 - Client 10.0.1.89 requested PUT /api/v1/import with status 200 (response time: 334ms)
+[INFO] 2025-06-10 11:01:55.567 - Client 10.0.1.23 requested GET /api/v1/logs with status 200 (response time: 145ms)
+[INFO] 2025-06-10 11:04:12.901 - Client 10.0.1.34 requested POST /api/v1/upload with status 201 (response time: 567ms)
+[WARN] 2025-06-10 11:06:30.234 - Log file size approaching limit: 95MB (max: 100MB)
+[INFO] 2025-06-10 11:08:47.567 - Client 10.0.1.56 requested GET /api/v1/download/123 with status 200 (response time: 234ms)
+[INFO] 2025-06-10 11:11:04.901 - Client 10.0.1.12 requested PUT /api/v1/settings with status 200 (response time: 76ms)
+[ERROR] 2025-06-10 11:13:22.234 - Service unavailable: payment gateway down
+[INFO] 2025-06-10 11:15:39.567 - Client 10.0.1.78 requested DELETE /api/v1/cache with status 204 (response time: 38ms)
+[INFO] 2025-06-10 11:17:56.901 - Client 10.0.1.90 requested GET /api/v1/notifications with status 200 (response time: 112ms)
+[INFO] 2025-06-10 11:20:14.234 - Client 10.0.1.45 requested POST /api/v1/webhook with status 201 (response time: 156ms)
+[INFO] 2025-06-10 11:22:31.567 - Client 10.0.1.67 requested GET /api/v1/status with status 200 (response time: 45ms)
+[WARN] 2025-06-10 11:24:48.901 - Network latency increased: 150ms average (normal: 50ms)
+[INFO] 2025-06-10 11:27:06.234 - Client 10.0.1.89 requested PUT /api/v1/profile with status 200 (response time: 134ms)
+[INFO] 2025-06-10 11:29:23.567 - Client 10.0.1.23 requested DELETE /api/v1/sessions with status 204 (response time: 52ms)
+[ERROR] 2025-06-10 11:31:40.901 - Configuration error: invalid JSON format in config.json
+[INFO] 2025-06-10 11:33:58.234 - Client 10.0.1.34 requested GET /api/v1/analytics with status 200 (response time: 278ms)
+[INFO] 2025-06-10 11:36:15.567 - Client 10.0.1.56 requested POST /api/v1/batch with status 202 (response time: 412ms)
+[INFO] 2025-06-10 11:38:32.901 - Client 10.0.1.12 requested GET /api/v1/queue/status with status 200 (response time: 89ms)
+[INFO] 2025-06-10 11:40:50.234 - Client 10.0.1.78 requested PUT /api/v1/preferences with status 200 (response time: 118ms)
+[ERROR] 2025-06-10 11:43:07.567 - File upload failed: virus detected in uploaded file
+[INFO] 2025-06-10 11:45:24.901 - Client 10.0.1.90 requested DELETE /api/v1/temp with status 204 (response time: 41ms)
+[INFO] 2025-06-10 11:47:42.234 - Client 10.0.1.45 requested GET /api/v1/dashboard with status 200 (response time: 95ms)
+[INFO] 2025-06-10 11:49:59.567 - Client 10.0.1.67 requested POST /api/v1/orders with status 201 (response time: 198ms)
+[WARN] 2025-06-10 11:52:16.901 - Backup job running longer than expected: 45 minutes
+[INFO] 2025-06-10 11:54:34.234 - Client 10.0.1.89 requested GET /api/v1/products with status 200 (response time: 145ms)
+[INFO] 2025-06-10 11:56:51.567 - Client 10.0.1.23 requested PUT /api/v1/cart with status 200 (response time: 87ms)
+[ERROR] 2025-06-10 11:59:08.901 - Database query timeout: complex query took too long
+[INFO] 2025-06-10 12:01:26.234 - Client 10.0.1.34 requested DELETE /api/v1/temp with status 204 (response time: 43ms)
+[INFO] 2025-06-10 12:03:43.567 - Client 10.0.1.56 requested GET /api/v1/search with status 200 (response time: 167ms)
+[INFO] 2025-06-10 12:06:00.901 - Client 10.0.1.12 requested POST /api/v1/upload with status 201 (response time: 289ms)
+[INFO] 2025-06-10 12:08:18.234 - Client 10.0.1.78 requested GET /api/v1/download/456 with status 200 (response time: 245ms)
+[WARN] 2025-06-10 12:10:35.567 - Memory leak detected: 50MB increase over 1 hour
+[INFO] 2025-06-10 12:12:52.901 - Client 10.0.1.90 requested PUT /api/v1/settings with status 200 (response time: 98ms)
+[INFO] 2025-06-10 12:15:10.234 - Client 10.0.1.45 requested DELETE /api/v1/cache with status 204 (response time: 35ms)
+[ERROR] 2025-06-10 12:17:27.567 - Cache corruption detected: Redis data integrity check failed
+[INFO] 2025-06-10 12:19:44.901 - Client 10.0.1.67 requested GET /api/v1/notifications with status 200 (response time: 123ms)
+[INFO] 2025-06-10 12:22:02.234 - Client 10.0.1.89 requested POST /api/v1/webhook with status 201 (response time: 167ms)
+[INFO] 2025-06-10 12:24:19.567 - Client 10.0.1.23 requested GET /api/v1/status with status 200 (response time: 54ms)
+[INFO] 2025-06-10 12:26:36.901 - Client 10.0.1.34 requested PUT /api/v1/profile with status 200 (response time: 156ms)
+[ERROR] 2025-06-10 12:28:54.234 - Backup failed: insufficient disk space for backup
+[INFO] 2025-06-10 12:31:11.567 - Client 10.0.1.56 requested DELETE /api/v1/sessions with status 204 (response time: 47ms)
+[INFO] 2025-06-10 12:33:28.901 - Client 10.0.1.12 requested GET /api/v1/analytics with status 200 (response time: 289ms)
+[INFO] 2025-06-10 12:35:46.234 - Client 10.0.1.78 requested POST /api/v1/batch with status 202 (response time: 423ms)
+[WARN] 2025-06-10 12:38:03.567 - Service restart initiated: graceful shutdown in progress
+[INFO] 2025-06-10 12:40:20.901 - Client 10.0.1.90 requested GET /api/v1/queue/status with status 200 (response time: 92ms)
+[INFO] 2025-06-10 12:42:38.234 - Client 10.0.1.45 requested PUT /api/v1/preferences with status 200 (response time: 118ms)
+[INFO] 2025-06-10 12:44:55.567 - Client 10.0.1.67 requested DELETE /api/v1/temp with status 204 (response time: 39ms)
+[ERROR] 2025-06-10 12:47:12.901 - Email delivery failed: SMTP server unreachable
+[INFO] 2025-06-10 12:49:30.234 - Client 10.0.1.89 requested GET /api/v1/dashboard with status 200 (response time: 87ms)
+[INFO] 2025-06-10 12:51:47.567 - Client 10.0.1.23 requested POST /api/v1/login with status 201 (response time: 176ms)
+[INFO] 2025-06-10 12:54:04.901 - Client 10.0.1.34 requested GET /api/v1/users with status 200 (response time: 134ms)
+[WARN] 2025-06-10 12:56:22.234 - SSL certificate expires in 7 days
+[INFO] 2025-06-10 12:58:39.567 - Client 10.0.1.56 requested PUT /api/v1/settings with status 200 (response time: 82ms)
+[INFO] 2025-06-10 13:00:56.901 - Client 10.0.1.12 requested DELETE /api/v1/temp with status 204 (response time: 39ms)
+[ERROR] 2025-06-10 13:03:14.234 - Session expired: user session timed out
+[INFO] 2025-06-10 13:05:31.567 - Client 10.0.1.78 requested GET /api/v1/products with status 200 (response time: 167ms)
+[INFO] 2025-06-10 13:07:48.901 - Client 10.0.1.90 requested POST /api/v1/cart with status 201 (response time: 201ms)
+[INFO] 2025-06-10 13:10:06.234 - Client 10.0.1.45 requested GET /api/v1/search with status 200 (response time: 256ms)
+[INFO] 2025-06-10 13:12:23.567 - Client 10.0.1.67 requested PUT /api/v1/profile with status 200 (response time: 148ms)
+[ERROR] 2025-06-10 13:14:40.901 - API version mismatch: client using deprecated API v1
+[INFO] 2025-06-10 13:16:58.234 - Client 10.0.1.89 requested DELETE /api/v1/cache with status 204 (response time: 44ms)
+[INFO] 2025-06-10 13:19:15.567 - Client 10.0.1.23 requested GET /api/v1/notifications with status 200 (response time: 115ms)
+[INFO] 2025-06-10 13:21:32.901 - Client 10.0.1.34 requested POST /api/v1/feedback with status 201 (response time: 183ms)
+[WARN] 2025-06-10 13:23:50.234 - Configuration reloaded successfully
+[INFO] 2025-06-10 13:26:07.567 - Client 10.0.1.56 requested GET /api/v1/status with status 200 (response time: 58ms)
+[INFO] 2025-06-10 13:28:24.901 - Client 10.0.1.12 requested PUT /api/v1/config with status 200 (response time: 142ms)
+[INFO] 2025-06-10 13:30:42.234 - Client 10.0.1.78 requested DELETE /api/v1/sessions with status 204 (response time: 51ms)
+[ERROR] 2025-06-10 13:32:59.567 - Database constraint violation: duplicate key error
+[INFO] 2025-06-10 13:35:16.901 - Client 10.0.1.90 requested GET /api/v1/analytics with status 200 (response time: 298ms)
+[INFO] 2025-06-10 13:37:34.234 - Client 10.0.1.45 requested POST /api/v1/export with status 202 (response time: 401ms)
+[INFO] 2025-06-10 13:39:51.567 - Client 10.0.1.67 requested GET /api/v1/queue/status with status 200 (response time: 94ms)
+[INFO] 2025-06-10 13:42:08.901 - Client 10.0.1.89 requested PUT /api/v1/preferences with status 200 (response time: 125ms)
+[WARN] 2025-06-10 13:44:26.234 - Data synchronization completed: 1,234 records processed
+[INFO] 2025-06-10 13:46:43.567 - Client 10.0.1.23 requested DELETE /api/v1/temp with status 204 (response time: 46ms)
+[INFO] 2025-06-10 13:49:00.901 - Client 10.0.1.34 requested GET /api/v1/dashboard with status 200 (response time: 91ms)
+[INFO] 2025-06-10 13:51:18.234 - Client 10.0.1.56 requested POST /api/v1/orders with status 201 (response time: 192ms)
+[ERROR] 2025-06-10 13:53:35.567 - File system error: corrupted file detected
+[INFO] 2025-06-10 13:55:52.901 - Client 10.0.1.12 requested GET /api/v1/products with status 200 (response time: 138ms)
+[INFO] 2025-06-10 13:58:10.234 - Client 10.0.1.78 requested PUT /api/v1/cart with status 200 (response time: 79ms)
+[INFO] 2025-06-10 14:00:27.567 - Client 10.0.1.90 requested DELETE /api/v1/temp with status 204 (response time: 46ms)
+[WARN] 2025-06-10 14:02:44.901 - Temporary files cleaned up: 15 files removed
+[INFO] 2025-06-10 14:05:02.234 - Client 10.0.1.45 requested GET /api/v1/search with status 200 (response time: 189ms)
+[INFO] 2025-06-10 14:07:19.567 - Client 10.0.1.67 requested POST /api/v1/upload with status 201 (response time: 325ms)
+[INFO] 2025-06-10 14:09:36.901 - Client 10.0.1.89 requested GET /api/v1/download/789 with status 200 (response time: 267ms)
+[ERROR] 2025-06-10 14:11:54.234 - Network interface down: eth0 connection lost
+[INFO] 2025-06-10 14:14:11.567 - Client 10.0.1.23 requested PUT /api/v1/settings with status 200 (response time: 105ms)
+[INFO] 2025-06-10 14:16:28.901 - Client 10.0.1.34 requested DELETE /api/v1/cache with status 204 (response time: 38ms)
+[INFO] 2025-06-10 14:18:46.234 - Client 10.0.1.56 requested GET /api/v1/notifications with status 200 (response time: 127ms)
+[INFO] 2025-06-10 14:21:03.567 - Client 10.0.1.12 requested POST /api/v1/webhook with status 201 (response time: 174ms)
+[WARN] 2025-06-10 14:23:20.901 - Session cleanup completed: 23 expired sessions removed
+[INFO] 2025-06-10 14:25:38.234 - Client 10.0.1.78 requested GET /api/v1/status with status 200 (response time: 61ms)
+[INFO] 2025-06-10 14:27:55.567 - Client 10.0.1.90 requested PUT /api/v1/profile with status 200 (response time: 159ms)
+[INFO] 2025-06-10 14:30:12.901 - Client 10.0.1.45 requested DELETE /api/v1/sessions with status 204 (response time: 49ms)
+[ERROR] 2025-06-10 14:32:30.234 - Process killed: out of memory error
+[INFO] 2025-06-10 14:34:47.567 - Client 10.0.1.67 requested GET /api/v1/analytics with status 200 (response time: 312ms)
+[INFO] 2025-06-10 14:37:04.901 - Client 10.0.1.89 requested POST /api/v1/batch with status 202 (response time: 445ms)
+[INFO] 2025-06-10 14:39:22.234 - Client 10.0.1.23 requested GET /api/v1/queue/status with status 200 (response time: 96ms)
+[INFO] 2025-06-10 14:41:39.567 - Client 10.0.1.34 requested PUT /api/v1/preferences with status 200 (response time: 132ms)
+[WARN] 2025-06-10 14:43:56.901 - Health check passed: all services operational
+[INFO] 2025-06-10 14:46:14.234 - Client 10.0.1.56 requested DELETE /api/v1/temp with status 204 (response time: 41ms)
+[INFO] 2025-06-10 14:48:31.567 - Client 10.0.1.12 requested GET /api/v1/dashboard with status 200 (response time: 87ms)
+[INFO] 2025-06-10 14:50:48.901 - Client 10.0.1.78 requested POST /api/v1/login with status 201 (response time: 176ms)
+[ERROR] 2025-06-10 14:53:06.234 - Database index corruption: rebuilding required
+[INFO] 2025-06-10 14:55:23.567 - Client 10.0.1.90 requested GET /api/v1/users with status 200 (response time: 134ms)
+[INFO] 2025-06-10 14:57:40.901 - Client 10.0.1.45 requested PUT /api/v1/settings with status 200 (response time: 82ms)
+[INFO] 2025-06-10 14:59:58.234 - Client 10.0.1.67 requested DELETE /api/v1/temp with status 204 (response time: 39ms)
+[WARN] 2025-06-10 15:02:15.567 - File uploaded successfully: document.pdf (2.3MB)
+[INFO] 2025-06-10 15:04:32.901 - Client 10.0.1.89 requested GET /api/v1/products with status 200 (response time: 167ms)
+[INFO] 2025-06-10 15:06:50.234 - Client 10.0.1.23 requested POST /api/v1/cart with status 201 (response time: 201ms)
+[INFO] 2025-06-10 15:09:07.567 - Client 10.0.1.34 requested GET /api/v1/search with status 200 (response time: 256ms)
+[ERROR] 2025-06-10 15:11:24.901 - SSL certificate validation failed
+[INFO] 2025-06-10 15:13:42.234 - Client 10.0.1.56 requested PUT /api/v1/profile with status 200 (response time: 148ms)
+[INFO] 2025-06-10 15:15:59.567 - Client 10.0.1.12 requested DELETE /api/v1/cache with status 204 (response time: 44ms)
+[INFO] 2025-06-10 15:18:16.901 - Client 10.0.1.78 requested GET /api/v1/notifications with status 200 (response time: 115ms)
+[INFO] 2025-06-10 15:20:34.234 - Client 10.0.1.90 requested POST /api/v1/feedback with status 201 (response time: 183ms)
+[WARN] 2025-06-10 15:22:51.567 - Background job completed: data_export_20250610
+[INFO] 2025-06-10 15:25:08.901 - Client 10.0.1.45 requested GET /api/v1/status with status 200 (response time: 58ms)
+[INFO] 2025-06-10 15:27:26.234 - Client 10.0.1.67 requested PUT /api/v1/config with status 200 (response time: 142ms)
+[INFO] 2025-06-10 15:29:43.567 - Client 10.0.1.89 requested DELETE /api/v1/sessions with status 204 (response time: 51ms)
+[ERROR] 2025-06-10 15:32:00.901 - External service error: third-party API returned 500
+[INFO] 2025-06-10 15:34:18.234 - Client 10.0.1.23 requested GET /api/v1/analytics with status 200 (response time: 298ms)
+[INFO] 2025-06-10 15:36:35.567 - Client 10.0.1.34 requested POST /api/v1/export with status 202 (response time: 401ms)
+[INFO] 2025-06-10 15:38:52.901 - Client 10.0.1.56 requested GET /api/v1/queue/status with status 200 (response time: 94ms)
+[INFO] 2025-06-10 15:40:10.234 - Client 10.0.1.12 requested PUT /api/v1/preferences with status 200 (response time: 125ms)
